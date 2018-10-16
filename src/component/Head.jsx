@@ -7,7 +7,8 @@ class Head extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            visible: false//注册显示
+            visible: false,//注册显示
+            loginVisible: false //登录模态框
         }
 
     }
@@ -17,6 +18,11 @@ class Head extends React.Component {
             visible: true
         })
     }
+    handleLogin = () => {
+        this.setState({
+            loginVisible: true
+        })
+    }
     handleSignUpSubmit = (e) => {
         e.preventDefault();
         console.log("inter");
@@ -24,20 +30,41 @@ class Head extends React.Component {
     render() {
         const { getFieldDecorator } = this.props.form;
 
-        const footLayout = (
+        const signFootLayout = (
             <div className="footContent clearfix">
                 <Button type="primary" htmlType="submit" onClick={(e) => this.handleSignUpSubmit(e)} className="push-left">创建新账号</Button>
                 <Button className="push-left">登录</Button>
                 <p className="push-left text-box" style={{ clear: "both" }}>注册即表示你同意<a href="#">隐私策略</a>和<a href="#">服务条款</a></p>
             </div>
+        );
+        const loginFootLayout = (
+            <div className="footContent clearfix">
+
+                <Button  type="primary" className="push-left" htmlType="submit"><Icon type="unlock" theme="outlined" />登录</Button>
+                <Button  className="push-left">创建新账号</Button>
+
+            </div>
         )
         const signModal = {
             visible: this.state.visible,
             title: "创建新账户",
-            footer: { ...footLayout },
+            footer: { ...signFootLayout },
             onCancel: () => {
                 this.setState({
                     visible: false
+                })
+            },
+            width: 710,
+            height: 498
+        };
+
+        const loginModal = {
+            visible: this.state.loginVisible,
+            title: "登录",
+            footer: { ...loginFootLayout },
+            onCancel: () => {
+                this.setState({
+                    loginVisible: false
                 })
             },
             width: 710,
@@ -65,7 +92,8 @@ class Head extends React.Component {
                     <div className="panel clearfix">
                         <span>
                             <Button type="primary" className="sign-up-button" onClick={() => this.handleSignUp()}>注册</Button>
-                            <Button type="primary" className="login-button"><Icon type="user" theme="outlined" />登录</Button>
+                            <Button type="primary" className="login-button" onClick={() => this.handleLogin()}><Icon type="user" theme="outlined" />登录</Button>
+
                         </span>
                         <ul className="icon clearfix">
                             <li>
@@ -77,6 +105,7 @@ class Head extends React.Component {
                         </ul>
                     </div>
                 </div>
+                {/** 注册的模态框*/}
                 <Modal {...signModal}>
                     <Form >
                         <FormItem
@@ -115,6 +144,30 @@ class Head extends React.Component {
                                 <Input style={{ width: "230px", height: "28px", borderWidth: 1, padding: 4 }} />
                             )}
                             <span className="extra-text">至少10个字母</span>
+                        </FormItem>
+
+                    </Form>
+                </Modal>
+                {/** 登录的模态框*/}
+                <Modal {...loginModal}>
+                    <Form >
+                        <FormItem
+                            label="用户"
+                            {...formItemLayout}
+                        >
+                            {getFieldDecorator('emailUser')(
+                                <Input style={{ width: "230px", height: "28px", borderWidth: 1, padding: 4 }} placeholder="用户名或者电子邮箱" />
+                            )}
+
+                        </FormItem>
+                        <FormItem
+                            label="密码"
+                            {...formItemLayout}
+                        >
+                            {getFieldDecorator('password')(
+                                <Input style={{ width: "230px", height: "28px", borderWidth: 1, padding: 4 }} />
+                            )}
+                            <span className="extra-text">我忘记了密码</span>
                         </FormItem>
 
                     </Form>
