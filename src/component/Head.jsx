@@ -10,11 +10,11 @@ class Head extends React.Component {
         this.state = {
             visible: false,//注册显示
             loginVisible: false, //登录模态框
-            searchHidden: false //用于搜索框的显示
+            searchHidden: false, //用于搜索框的显示
+            signData:{} //存放注册的信息
         }
-
     }
-
+  
     handleSignUp = () => {
         this.setState({
             visible: true
@@ -27,11 +27,14 @@ class Head extends React.Component {
     }
     handleSignUpSubmit = (e) => {
         e.preventDefault();
-        console.log("inter");
+        const values =this.props.form.getFieldsValue()    
+        this.setState({
+        signData:values
+       })  
     }
     handleSearch=()=>{
         this.setState({
-            handleSearch:true
+            searchHidden:!this.state.searchHidden
         })
     }
     render() {
@@ -39,8 +42,9 @@ class Head extends React.Component {
 
         const signFootLayout = (
             <div className="footContent clearfix">
-                <Button type="primary" htmlType="submit" style={{ height: 16 }} onClick={(e) => this.handleSignUpSubmit(e)} className="push-left">创建新账号</Button>
-                <Button className="push-left" style={{ height: 16 }}>登录</Button>
+           
+                <Button type="primary" htmlType="submit" onClick={(e) => this.handleSignUpSubmit(e)} className="push-left" >创建新账号</Button>
+                <Button className="push-left" >登录</Button>
                 <p className="push-left text-box" style={{ clear: "both" }}>注册即表示你同意<a href="#">隐私策略</a>和<a href="#">服务条款</a></p>
             </div>
         );
@@ -111,7 +115,7 @@ class Head extends React.Component {
                             </li>
                         </ul>
                         {this.state.searchHidden ?
-                            <div className="search-menu">
+                            (<div className="search-menu">
                                 <div className="menu-panel drop-down" style={{ top: "100%", width: 500, height: "auto" }}>
                                     <div className="panel-body">
                                         <div className="panel-body-contents clearfix">
@@ -122,7 +126,7 @@ class Head extends React.Component {
                                         </div>
                                     </div>
                                 </div>
-                            </div> : ""
+                            </div> ): ""
                         }
                     </div>
                 </div>
@@ -131,40 +135,43 @@ class Head extends React.Component {
                     <Form >
                         <FormItem
                             label="邮箱"
+                            extra="永不公开显示"
                             {...formItemLayout}
                         >
-                            {getFieldDecorator('email')(
-                                <Input style={{ width: "230px", height: "28px", borderWidth: 1, padding: 4 }} />
+                            {getFieldDecorator('email')(    
+                                <Input style={{ width: "230px", height: "28px", borderWidth: 1, padding: 4 }} autoFocus/>
                             )}
-                            <span className="extra-text">永不公开暂时</span>
                         </FormItem>
                         <FormItem
                             label="用户名"
+                            extra="独一无二，没有空格，简短"
                             {...formItemLayout}
                         >
                             {getFieldDecorator('name'
                             )(
                                 <Input style={{ width: "230px", height: "28px", borderWidth: 1, padding: 4 }} />
                             )}
-                            <span className="extra-text">独一无二，没有空格，简短</span>
+                           
                         </FormItem>
                         <FormItem
                             label="昵称"
+                            extra="你的全名(可选)"
                             {...formItemLayout}
                         >
                             {getFieldDecorator('nickname')(
                                 <Input style={{ width: "230px", height: "28px", borderWidth: 1, padding: 4 }} />
                             )}
-                            <span className="extra-text">你的全名(可选)</span>
+                          
                         </FormItem>
                         <FormItem
                             label="密码"
+                            extra="至少10个字母"
                             {...formItemLayout}
                         >
                             {getFieldDecorator('password')(
                                 <Input style={{ width: "230px", height: "28px", borderWidth: 1, padding: 4 }} />
                             )}
-                            <span className="extra-text">至少10个字母</span>
+                            
                         </FormItem>
 
                     </Form>
